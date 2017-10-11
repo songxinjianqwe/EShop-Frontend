@@ -1,25 +1,24 @@
 <template>
-    <div class="hello">
-        <h1>{{ msg }}</h1>
-        <!-- 当Enter键按下时，会调用onKeyDown方法 -->
-        <!-- <input type="text" v-on:keydown.enter="onKeyDown" placeholder="Input"></input> -->
-        <!-- <el-button @click="sayHello">ElementUI Button</el-button><br> -->
-        <el-form :model="loginForm" ref="loginForm" label-width="100px" class="loginForm">
+    <div>
+        <el-form :model="loginForm" ref="loginForm" label-width="100px">
             <el-form-item label="用户名" prop="username">
-                <el-input v-model="loginForm.username"></el-input>
+                <el-input v-model="loginForm.username" size="tiny"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-                <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
+                <el-input type="password" v-model="loginForm.password" auto-complete="off" size="tiny"></el-input>
             </el-form-item>
             <el-form-item label="验证码" prop="captchaValue">
-                <el-input v-model="loginForm.captchaValue" auto-complete="off"></el-input>
+                <el-input v-model="loginForm.captchaValue" auto-complete="off" size="tiny"></el-input>
             </el-form-item>
-            <el-button @click="fetchCaptcha">换一张</el-button>
-            <img :src="'data:image/jpeg;base64,'+image"></img><br>
+            <el-form-item>
+                <el-button @click="fetchCaptcha">换一张</el-button>
+                <img :src="'data:image/jpeg;base64,'+image"></img>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm">登录</el-button>
                 <el-button @click="resetForm">重置</el-button>
             </el-form-item>
+            <p v-for="error in errors" :key="error">{{error.field}}:{{error.message}}</p>
         </el-form>
     </div>
 </template>
@@ -35,9 +34,8 @@ export default {
                 captchaCode: '',
                 userMode: 'USERNAME'
             },
-            msg: 'Hello World',
             image: '',
-            token: ''
+            errors: []
         }
     },
     methods: {
@@ -52,13 +50,28 @@ export default {
             })
         },
         submitForm() {
+            this.errorText = ''
             console.log(this.loginForm)
             var that = this
             this.axios.post("/tokens", this.loginForm).then(function(response) {
-                that.token = response.data
-                console.log(that.token)
+                console.log("登录成功")
+                console.log(response.data)
+                //清空表单
+                that.resetForm()
+                //发出成功提示
+                const h = that.$createElement;
+                that.$notify({
+                    title: '登录成功',
+                    message: h('i', { style: 'color: teal' }, '欢迎您，' + response.data.username)
+                });
+                // 子组件向父组件传递数据
+                that.$emit('login-success', response.data)
             }).catch(function(error) {
-                throw error
+                that.fetchCaptcha()
+                console.log(error)
+                if ("response" in error) {
+                    that.errors = error.response.data.fieldErrors
+                }
             })
         },
         resetForm() {
@@ -72,24 +85,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-    font-weight: normal;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    display: inline-block;
-    margin: 0 10px;
-}
-
-a {
-    color: #42b983;
-}
 </style>

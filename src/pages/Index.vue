@@ -22,7 +22,7 @@
             <div class="index-right">
                 <!-- 右侧走马灯 -->
                 <div class="index-right-carousel">
-                    <el-carousel height="506px">
+                    <el-carousel height="490px">
                         <el-carousel-item v-for="item in ads" :key="item.product.id">
                             <router-link :to="'/products/'+item.product.id">
                                 <img :src="item.src">
@@ -33,8 +33,17 @@
 
                 <!-- 右侧公告板 -->
                 <div class="index-board-list">
-                    <div class="index-board-item">
-
+                    <div class="index-board-item" v-for="(item,index) in board" :class="[{'line-last' : index % 2 !== 0}, 'index-board-' + item.alias]" :key="item.id">
+                        <!-- 每块板 -->
+                        <div class="index-board-item-inner">
+                            <h2>{{ item.name }}</h2>
+                            <p>{{ item.description }}</p>
+                            <div class="index-board-button">
+                                <transition name="fade">
+                                    <router-link class="button" :to="'/products/'+item.id">了解详情</router-link>
+                                </transition>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,6 +53,7 @@
 
 <script>
 export default {
+
     data() {
         return {
             imageMappings: {
@@ -59,36 +69,7 @@ export default {
             },
             news: [],
             ads: [],
-            boardList: [
-                {
-                    title: '开放产品',
-                    description: '开放产品是一款开放产品',
-                    id: 'car',
-                    toKey: 'analysis',
-                    saleout: false
-                },
-                {
-                    title: '品牌营销',
-                    description: '品牌营销帮助你的产品更好地找到定位',
-                    id: 'earth',
-                    toKey: 'count',
-                    saleout: false
-                },
-                {
-                    title: '使命必达',
-                    description: '使命必达快速迭代永远保持最前端的速度',
-                    id: 'loud',
-                    toKey: 'forecast',
-                    saleout: true
-                },
-                {
-                    title: '勇攀高峰',
-                    description: '帮你勇闯高峰，到达事业的顶峰',
-                    id: 'hill',
-                    toKey: 'publish',
-                    saleout: false
-                }
-            ]
+            board: []
         }
     },
     methods: {
@@ -139,6 +120,15 @@ export default {
         }).catch(function(error) {
             throw error
         })
+
+        //init board
+        this.axios.get("/products/categories/on_board").then(function(response) {
+            console.log("读取board")
+            console.log(response.data)
+            that.board = response.data
+        }).catch(function(error) {
+            throw error
+        })
     }
 }
 </script>
@@ -159,6 +149,17 @@ export default {
     float: left;
     width: 900px;
 }
+
+
+
+
+
+
+
+
+
+
+/* LeftBlock */
 
 .index-left-block {
     margin: 15px;
@@ -201,6 +202,8 @@ export default {
 
 
 
+
+
 /* board */
 
 .index-board-list {
@@ -222,20 +225,28 @@ export default {
     padding-left: 120px;
 }
 
-.index-board-car .index-board-item-inner {
-    background: url(../assets/images/1.png) no-repeat;
+.index-board-JavaEE .index-board-item-inner {
+    background: url(../assets/board/JavaEE.png) no-repeat;
 }
 
-.index-board-loud .index-board-item-inner {
-    background: url(../assets/images/2.png) no-repeat;
+.index-board-Android .index-board-item-inner {
+    background: url(../assets/board/Android.png) no-repeat;
 }
 
-.index-board-earth .index-board-item-inner {
-    background: url(../assets/images/3.png) no-repeat;
+.index-board-IOS .index-board-item-inner {
+    background: url(../assets/board/IOS.png) no-repeat;
 }
 
-.index-board-hill .index-board-item-inner {
-    background: url(../assets/images/4.png) no-repeat;
+.index-board-DataAnalysis .index-board-item-inner {
+    background: url(../assets/board/DataAnalysis.png) no-repeat;
+}
+
+.index-board-Web .index-board-item-inner {
+    background: url(../assets/board/Web.png) no-repeat;
+}
+
+.index-board-UI .index-board-item-inner {
+    background: url(../assets/board/UI.png) no-repeat;
 }
 
 .index-board-item h2 {
@@ -254,7 +265,7 @@ export default {
 }
 
 .lastest-news {
-    min-height: 512px;
+    min-height: 553px;
 }
 
 .hot-tag {
@@ -275,19 +286,25 @@ export default {
 
 
 
+
+
+
+
+
+
 /* 走马灯 */
 
 .index-right-carousel {
     position: relative;
     margin: 15px 15px 15px 0;
     width: 900px;
-    height: 506px;
+    height: 490px;
     overflow: hidden;
 }
 
 .index-right-carousel img {
     width: 900px;
-    height: 506px;
+    height: 490px;
 }
 
 .el-carousel__item h3 {
@@ -304,5 +321,24 @@ export default {
 
 .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
+}
+
+
+
+
+
+/* transition fade */
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s
+}
+
+.fade-enter,
+.fade-leave-to
+/* .fade-leave-active in below version 2.1.8 */
+
+{
+    opacity: 0
 }
 </style>

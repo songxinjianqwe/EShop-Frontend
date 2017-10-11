@@ -1,29 +1,62 @@
 <template>
   <div>
+    <!-- Header -->
     <div class="app-header">
       <div class="app-header-inner">
-        <img src="../assets/logo.png"></img>
+        <router-link to="/">
+          <img src="../assets/logo.png"></img>
+        </router-link>
         <!-- nav是navigation导航栏的简写 -->
         <div class="header-nav">
           <ul class="nav-list">
-            <li>登录</li>
+            <!-- 如果登录，那么这里会显示：用户名|退出|关于 -->
+            <!-- 如果未登录，那么这里会显示：登录|注册|关于 -->
+            <li v-if="isLogin"> {{ loginResult.username }}</li>
+            <li v-if="isLogin" class="nav-pile">|</li>
+            <li v-if="isLogin" @click="logout">退出</li>
+            <li v-if="!isLogin" @click="loginDialogVisible = true">登录</li>
             <li class="nav-pile">|</li>
-            <li>注册</li>
-            <li class="nav-pile">|</li>
-            <li>关于</li>
+            <li v-if="!isLogin" @click="registerDialogVisible = true">注册</li>
+            <li v-if="!isLogin" class="nav-pile">|</li>
+            <!-- 在@click中可以直接写表达式 -->
+            <li @click="aboutDialogVisible = true">关于</li>
           </ul>
         </div>
       </div>
     </div>
+
+    <!-- Content -->
     <div class="app-content">
       <!-- 缓存 -->
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </div>
+
+    <!-- Footer -->
     <div class="app-footer">
       <p> 2017 ESHOP </p>
     </div>
+
+    <!-- Login Dialog -->
+    <el-dialog title="登录" :visible.sync="loginDialogVisible">
+      <login-form @login-success="onLoginSuccess"></login-form>
+    </el-dialog>
+
+    <!-- Register Dialog -->
+    <el-dialog title="注册" :visible.sync="registerDialogVisible">
+      <register-form @register-success="onRegisterSuccess"></register-form>
+    </el-dialog>
+
+    <!-- About Dialog -->
+    <el-dialog title="关于" :visible.sync="aboutDialogVisible" size="small">
+      <p>EShop</p><br><br>
+      <p>Based On Vue.js,Vue-router,Axios,Element-ui</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="aboutDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -32,13 +65,72 @@
 // 而页面都放在/pages里面，每个Vue文件代表一个页面
 // 主界面布局：Layout.vue
 // 它是一个根节点，并放了根CSS，<style>不能加scoped，因为是全局共享的。
+
+//使用一个子组件:
+//Step1: import
+//Step2: export default中的components加入
+//Step3: 在<template>中使用组件的标签
+
+import LoginForm from '@/components/LoginForm'
+import RegisterForm from '@/components/RegisterForm'
+
 export default {
   data() {
     return {
-
+      isLogin: false,
+      loginResult: null,
+      loginDialogVisible: false,
+      logoutDialogVisible: false,
+      registerDialogVisible: false,
+      aboutDialogVisible: false
     }
   },
   methods: {
+    /**当登录成功时回调 */
+    onLoginSuccess(loginResult) {
+      console.log("输出loginResult")
+      console.log(loginResult)
+      localStorage.setItem('loginResult', JSON.stringify(loginResult))
+      this.loginResult = loginResult
+      this.isLogin = true
+      this.loginDialogVisible = false
+    },
+    onRegisterSuccess(){
+      this.registerDialogVisible = false
+    },
+    /**当退出登录时，会提示信息，并删除本地的localStorage，本地的内存数据，以及服务器的token */
+    logout() {
+      var that = this
+      const h = this.$createElement;
+      this.$notify({
+        title: '退出成功',
+        message: h('i', { style: 'color: teal' }, '再见，' + this.loginResult.username)
+      });
+
+      localStorage.clear('loginResult')
+
+      console.log("删除服务器的token")
+      let header = { 'Authentication': this.loginResult.token }
+      this.axios.delete("/tokens", { headers: header }).then(function(response) {
+        console.log(response.data)
+        that.isLogin = false
+        that.loginResult = null
+      }).catch(function(error) {
+        throw error
+      })
+    }
+  },
+  //当刷新时，检查localStorage，如果有用户数据，说明仍在登录状态
+  created() {
+    console.log(localStorage.getItem('loginResult'))
+    if (localStorage.getItem('loginResult') !== null) {
+      this.isLogin = true
+      this.loginResult = JSON.parse(localStorage.getItem('loginResult'))
+    }
+  },
+  components: {
+    LoginForm,
+    RegisterForm
   }
 }
 </script>
@@ -137,6 +229,22 @@ video {
   font: inherit;
   vertical-align: baseline;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* HTML5 display-role reset for older browsers */

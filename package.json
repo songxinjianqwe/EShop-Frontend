@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "date-fns": "^1.29.0",
     "element-ui": "^1.4.6",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0"
