@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/pages/Index'
+import RegisterPage from '@/pages/RegisterPage'
+import RegisterForm from '@/components/RegisterForm'
+import Activation from '@/components/Activation'
+import RegisterValidation from '@/components/RegisterValidation'
 
 Vue.use(Router)
 // main.js引入了VueRouter，所有的页面路由都写到router/index.js这个文件里
@@ -11,6 +15,24 @@ export default new Router({
     {
       path: '/',
       component: Index
+    },
+    {
+      path: '/register',
+      component: RegisterPage,
+      children: [
+        {
+          path: 'form',
+          component: RegisterForm
+        },
+        {
+          path: 'activate/:id',
+          component: Activation
+        },
+        {
+          path: 'validate/:activationId/:activationCode',
+          component: RegisterValidation
+        }
+      ]
     }
   ]
 })

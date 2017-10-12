@@ -16,7 +16,9 @@
             <li v-if="isLogin" @click="logout">退出</li>
             <li v-if="!isLogin" @click="loginDialogVisible = true">登录</li>
             <li class="nav-pile">|</li>
-            <li v-if="!isLogin" @click="registerDialogVisible = true">注册</li>
+            <router-link v-if="!isLogin" to="/register/form">
+              <li>注册</li>
+            </router-link>
             <li v-if="!isLogin" class="nav-pile">|</li>
             <!-- 在@click中可以直接写表达式 -->
             <li @click="aboutDialogVisible = true">关于</li>
@@ -43,11 +45,6 @@
       <login-form @login-success="onLoginSuccess"></login-form>
     </el-dialog>
 
-    <!-- Register Dialog -->
-    <el-dialog title="注册" :visible.sync="registerDialogVisible">
-      <register-form @register-success="onRegisterSuccess"></register-form>
-    </el-dialog>
-
     <!-- About Dialog -->
     <el-dialog title="关于" :visible.sync="aboutDialogVisible" size="small">
       <p>EShop</p><br><br>
@@ -72,7 +69,6 @@
 //Step3: 在<template>中使用组件的标签
 
 import LoginForm from '@/components/LoginForm'
-import RegisterForm from '@/components/RegisterForm'
 
 export default {
   data() {
@@ -81,7 +77,6 @@ export default {
       loginResult: null,
       loginDialogVisible: false,
       logoutDialogVisible: false,
-      registerDialogVisible: false,
       aboutDialogVisible: false
     }
   },
@@ -95,12 +90,9 @@ export default {
       this.isLogin = true
       this.loginDialogVisible = false
     },
-    onRegisterSuccess(){
-      this.registerDialogVisible = false
-    },
     /**当退出登录时，会提示信息，并删除本地的localStorage，本地的内存数据，以及服务器的token */
     logout() {
-      var that = this
+      let that = this
       const h = this.$createElement;
       this.$notify({
         title: '退出成功',
@@ -129,8 +121,7 @@ export default {
     }
   },
   components: {
-    LoginForm,
-    RegisterForm
+    LoginForm
   }
 }
 </script>
@@ -229,6 +220,8 @@ video {
   font: inherit;
   vertical-align: baseline;
 }
+
+
 
 
 

@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         fetchCaptcha() {
-            var that = this
+            let that = this
             this.axios.get("/captchas").then(function(response) {
                 console.log(response.data)
                 that.image = response.data.image
@@ -52,7 +52,7 @@ export default {
         submitForm() {
             this.errorText = ''
             console.log(this.loginForm)
-            var that = this
+            let that = this
             this.axios.post("/tokens", this.loginForm).then(function(response) {
                 console.log("登录成功")
                 console.log(response.data)

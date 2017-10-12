@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="register">
         <el-form :model="registerForm" ref="registerForm" label-width="100px">
             <el-form-item label="用户名" prop="username">
                 <el-input v-model="registerForm.username" size="tiny"></el-input>
@@ -65,22 +65,22 @@ export default {
     },
     methods: {
         submitForm() {
-            var that = this
+            let that = this
             console.log("表单数据为", this.registerForm)
             console.log("日期为", this.registerForm.birthday)
             this.axios.post("/users", this.registerForm).then(function(response) {
-                console.log("注册成功")
+                console.log("注册成功,用户Id为",response.data.id)
                 //清空表单
                 that.resetForm()
-                //发出成功提示
-                const h = that.$createElement;
-                that.$notify({
-                    title: '注册成功',
-                    message: h('i', { style: 'color: teal' }, '欢迎您加入我们，' + that.registerForm.username)
-                });
-                // 子组件向父组件传递消息
-                that.$emit('register-success')
+                let id = response.data.id
+                //注意,${id}会被替换为值
+                //路由传值有两种方式：一种是path中插值，比如下面这行
+                //注意不是字符串，使用`框起来的
+                //另一种是带request param
+                //that.$router.push({path:"",query:{key:value}})
+                that.$router.push({path:`/register/activate/${id}`})
             }).catch(function(error) {
+                console.log(error)
                 if ("response" in error) {
                     that.errors = error.response.data.fieldErrors
                 }
@@ -99,5 +99,12 @@ export default {
 </script>
 
 <style scoped>
-
+.register{
+    width:30%;
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 </style>

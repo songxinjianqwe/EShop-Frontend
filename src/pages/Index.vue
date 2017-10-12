@@ -83,7 +83,7 @@ export default {
         }
     },
     created() {
-        var that = this
+        let that = this
 
         //init products
         this.axios.get("/products/categories").then(function(response) {
