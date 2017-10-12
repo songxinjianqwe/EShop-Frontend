@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="login">
         <el-form :model="loginForm" ref="loginForm" label-width="100px">
             <el-form-item label="用户名" prop="username">
                 <el-input v-model="loginForm.username" size="tiny"></el-input>
@@ -18,7 +18,7 @@
                 <el-button type="primary" @click="submitForm">登录</el-button>
                 <el-button @click="resetForm">重置</el-button>
                 <el-button @click="forgetPassword">忘记密码</el-button>
-            </el-form-item>    
+            </el-form-item>
             <p v-for="error in errors" :key="error">{{error.field}}:{{error.message}}</p>
         </el-form>
     </div>
@@ -65,8 +65,11 @@ export default {
                     title: '登录成功',
                     message: h('i', { style: 'color: teal' }, '欢迎您，' + response.data.username)
                 });
-                // 子组件向父组件传递数据
-                that.$emit('login-success', response.data)
+                localStorage.setItem('loginResult', JSON.stringify(response.data))
+                //跳转回主页
+                that.$router.push('/')
+                //刷新当前页面
+                window.location.reload()
             }).catch(function(error) {
                 that.fetchCaptcha()
                 console.log(error)
@@ -78,9 +81,9 @@ export default {
         resetForm() {
             this.$refs['loginForm'].resetFields()
         },
-        forgetPassword(){
+        forgetPassword() {
             this.resetForm()
-            this.$emit('forget-password')
+            this.$router.push('/forget_password')
         }
     },
     created() {
@@ -91,7 +94,16 @@ export default {
 </script>
 
 <style scoped>
-.item{
+.item {
     text-align: center
+}
+
+.login {
+    width: 30%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 </style>

@@ -7,7 +7,10 @@ import Activation from '@/components/Activation'
 import RegisterValidation from '@/components/RegisterValidation'
 import ForgetPasswordPage from '@/pages/ForgetPasswordPage'
 import ResetPasswordPage from '@/pages/ResetPasswordPage'
-
+import LoginPage from '@/pages/LoginPage'
+import CategoryPage from '@/pages/CategoryPage'
+import ProductPage from '@/pages/ProductPage'
+import NewsPage from '@/pages/NewsPage'
 
 Vue.use(Router)
 // main.js引入了VueRouter，所有的页面路由都写到router/index.js这个文件里
@@ -18,6 +21,10 @@ export default new Router({
     {
       path: '/',
       component: Index
+    },
+    {
+      path: '/login',
+      component: LoginPage
     },
     {
       path: '/register',
@@ -42,8 +49,20 @@ export default new Router({
       component: ForgetPasswordPage
     },
     {
-      path: '/reset_password/:verificationId/:verificationCode',
+      path: '/reset_password/:validationId/:validationCode',
       component: ResetPasswordPage
+    },
+    {
+      path: '/categories',
+      component: CategoryPage
+    },
+    {
+      path: '/products',
+      component: ProductPage
+    },
+    {
+      path: '/news',
+      component: NewsPage
     }
   ]
 })

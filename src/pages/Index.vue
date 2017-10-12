@@ -5,13 +5,17 @@
             <div class="index-left">
                 <!-- 左侧产品Block -->
                 <div class="index-left-block">
-                    <h2>全部产品</h2>
+                    <router-link to='/categories'>
+                        <h2 class="click-h2">全部产品</h2>
+                    </router-link>
                     <el-tree :data="products" :props="defaultProps" accordion @node-click="handleNodeClick"></el-tree>
                 </div>
 
                 <!-- 左侧新闻Block -->
                 <div class="index-left-block lastest-news">
-                    <h2>最新消息</h2>
+                    <router-link to='/news'>
+                        <h2 class="click-h2">最新消息</h2>
+                    </router-link>
                     <li v-for="item in news" :key="item.id">
                         <a :href="'/news/'+item.id" class="new-item">{{ item.title }}</a>
                     </li>
@@ -39,9 +43,8 @@
                             <h2>{{ item.name }}</h2>
                             <p>{{ item.description }}</p>
                             <div class="index-board-button">
-                                <transition name="fade">
-                                    <router-link class="button" :to="'/products/'+item.id">了解详情</router-link>
-                                </transition>
+                                <!-- 跳转到产品类别页 -->
+                                <router-link class="button" :to="'/categories/'+item.id">了解详情</router-link>
                             </div>
                         </div>
                     </div>
@@ -159,6 +162,10 @@ export default {
 
 
 
+
+
+
+
 /* LeftBlock */
 
 .index-left-block {
@@ -191,6 +198,12 @@ export default {
 .index-left-block li {
     padding: 5px;
 }
+
+.click-h2:hover{
+    background: rgb(128, 255, 128)
+}
+
+
 
 
 
@@ -292,6 +305,10 @@ export default {
 
 
 
+
+
+
+
 /* 走马灯 */
 
 .index-right-carousel {
@@ -323,22 +340,15 @@ export default {
     background-color: #d3dce6;
 }
 
-
-
-
-
-/* transition fade */
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity .5s
+.button {
+    background: #4fc08d;
+    color: #fff;
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
-.fade-enter,
-.fade-leave-to
-/* .fade-leave-active in below version 2.1.8 */
-
-{
-    opacity: 0
+.button:hover {
+    background: #4fc08d;
 }
 </style>

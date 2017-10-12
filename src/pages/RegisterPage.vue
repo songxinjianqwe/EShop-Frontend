@@ -27,6 +27,10 @@ export default {
     },
     methods: {
         changeStep() {
+            //如果不是/register相关的，直接返回，不做改变
+            if(this.$route.path.indexOf('/register') < 0){
+                return 
+            }
             console.log(this.$route.path)
             console.log(this.$route.path.split('/')[2])
             let paths = this.$route.path.split('/')

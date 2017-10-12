@@ -11,10 +11,12 @@
           <ul class="nav-list">
             <!-- 如果登录，那么这里会显示：用户名|退出|关于 -->
             <!-- 如果未登录，那么这里会显示：登录|注册|关于 -->
-            <li v-if="isLogin"> {{ loginResult.username }}</li>
+            <li v-if="isLogin">{{loginResult.username}}</li>
             <li v-if="isLogin" class="nav-pile">|</li>
             <li v-if="isLogin" @click="logout">退出</li>
-            <li v-if="!isLogin" @click="loginDialogVisible = true">登录</li>
+            <router-link v-if="!isLogin" to="/login">
+              <li>登录</li>
+            </router-link>
             <li class="nav-pile">|</li>
             <router-link v-if="!isLogin" to="/register/form">
               <li>注册</li>
@@ -40,10 +42,10 @@
       <p> 2017 ESHOP </p>
     </div>
 
-    <!-- Login Dialog -->
-    <el-dialog title="登录" :visible.sync="loginDialogVisible">
-      <login-form @login-success="onLoginSuccess" @forget-password="onForgetPassword"></login-form>
-    </el-dialog>
+    <!-- Login Dialog
+                <el-dialog title="登录" :visible.sync="loginDialogVisible">
+                  <login-form @login-success="onLoginSuccess" @forget-password="onForgetPassword"></login-form>
+                </el-dialog> -->
 
     <!-- About Dialog -->
     <el-dialog title="关于" :visible.sync="aboutDialogVisible" size="small">
@@ -53,7 +55,6 @@
         <el-button type="primary" @click="aboutDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
@@ -68,27 +69,26 @@
 //Step2: export default中的components加入
 //Step3: 在<template>中使用组件的标签
 
-import LoginForm from '@/components/LoginForm'
 
 export default {
   data() {
     return {
       isLogin: false,
       loginResult: null,
-      loginDialogVisible: false,
       logoutDialogVisible: false,
       aboutDialogVisible: false
     }
   },
   methods: {
-    /**当登录成功时回调 */
-    onLoginSuccess(loginResult) {
-      console.log("输出loginResult")
-      console.log(loginResult)
-      localStorage.setItem('loginResult', JSON.stringify(loginResult))
-      this.loginResult = loginResult
-      this.isLogin = true
-      this.loginDialogVisible = false
+    checkLoginState() {
+      if (localStorage.getItem('loginResult') !== null) {
+        this.isLogin = true
+        this.loginResult = JSON.parse(localStorage.getItem('loginResult'))
+        console.log('isLogin:', this.isLogin)
+        console.log('loginResult:', this.loginResult)
+      } else {
+        console.log('localStorage为空')
+      }
     },
     /**当退出登录时，会提示信息，并删除本地的localStorage，本地的内存数据，以及服务器的token */
     logout() {
@@ -110,22 +110,11 @@ export default {
       }).catch(function(error) {
         throw error
       })
-    },
-    onForgetPassword() {
-      this.loginDialogVisible = false
-      this.$router.push('/forget_password')
     }
   },
   //当刷新时，检查localStorage，如果有用户数据，说明仍在登录状态
   created() {
-    console.log(localStorage.getItem('loginResult'))
-    if (localStorage.getItem('loginResult') !== null) {
-      this.isLogin = true
-      this.loginResult = JSON.parse(localStorage.getItem('loginResult'))
-    }
-  },
-  components: {
-    LoginForm
+    this.checkLoginState()
   }
 }
 </script>
@@ -144,6 +133,12 @@ body {
   padding: 0;
   position: relative;
 }
+
+
+
+
+
+
 
 
 /* header */
@@ -186,11 +181,23 @@ body {
 
 
 
+
+
+
+
+
+
 /* content */
 
 .app-content {
   padding-bottom: 100px;
 }
+
+
+
+
+
+
 
 
 
@@ -205,13 +212,15 @@ body {
   background: #e3e4e8;
   clear: both;
   margin-top: -100px;
-  position:absolute;
-  bottom:0;
+  position: absolute;
+  bottom: 0;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
+
 a {
   color: inherit;
   text-decoration: none;
