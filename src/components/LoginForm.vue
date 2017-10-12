@@ -10,14 +10,15 @@
             <el-form-item label="验证码" prop="captchaValue">
                 <el-input v-model="loginForm.captchaValue" auto-complete="off" size="tiny"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item class="item">
                 <el-button @click="fetchCaptcha">换一张</el-button>
                 <img :src="'data:image/jpeg;base64,'+image"></img>
             </el-form-item>
-            <el-form-item>
+            <el-form-item class="item">
                 <el-button type="primary" @click="submitForm">登录</el-button>
                 <el-button @click="resetForm">重置</el-button>
-            </el-form-item>
+                <el-button @click="forgetPassword">忘记密码</el-button>
+            </el-form-item>    
             <p v-for="error in errors" :key="error">{{error.field}}:{{error.message}}</p>
         </el-form>
     </div>
@@ -76,9 +77,13 @@ export default {
         },
         resetForm() {
             this.$refs['loginForm'].resetFields()
+        },
+        forgetPassword(){
+            this.resetForm()
+            this.$emit('forget-password')
         }
     },
-    mounted() {
+    created() {
         // 调用methods里的方法必须用this.
         this.fetchCaptcha()
     }
@@ -86,4 +91,7 @@ export default {
 </script>
 
 <style scoped>
+.item{
+    text-align: center
+}
 </style>
