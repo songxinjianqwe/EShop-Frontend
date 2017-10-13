@@ -10,7 +10,6 @@ import ResetPasswordPage from '@/pages/ResetPasswordPage'
 import LoginPage from '@/pages/LoginPage'
 import CategoryPage from '@/pages/CategoryPage'
 import CategoryInfoPage from '@/pages/CategoryInfoPage'
-import ProductPage from '@/pages/ProductPage'
 import ProductInfoPage from '@/pages/ProductInfoPage'
 import NewsPage from '@/pages/NewsPage'
 import NewsInfoPage from '@/pages/NewsInfoPage'
@@ -73,10 +72,6 @@ export default new Router({
     {
       path: '/categories/:id',
       component: CategoryInfoPage
-    },
-    {
-      path: '/products',
-      component: ProductPage
     },
     {
       path: '/products/:id',

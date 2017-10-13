@@ -1,5 +1,6 @@
 <template>
-    <div class="login">
+    <!-- 键盘监听回车键，按下时提交表单 -->
+    <div class="login" @keydown.enter="submitForm">
         <el-form :model="loginForm" ref="loginForm" label-width="100px">
             <el-form-item label="用户名" prop="username">
                 <el-input v-model="loginForm.username" size="tiny"></el-input>
@@ -8,7 +9,7 @@
                 <el-input type="password" v-model="loginForm.password" auto-complete="off" size="tiny"></el-input>
             </el-form-item>
             <el-form-item label="验证码" prop="captchaValue">
-                <el-input v-model="loginForm.captchaValue" auto-complete="off" size="tiny"></el-input>
+                <el-input v-model="loginForm.captchaValue" auto-complete="off" size="tiny" ></el-input>
             </el-form-item>
             <el-form-item class="item">
                 <el-button @click="fetchCaptcha">换一张</el-button>

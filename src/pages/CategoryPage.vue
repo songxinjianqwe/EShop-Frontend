@@ -1,6 +1,6 @@
 <template>
     <div class="category">
-        <h1>学院</h1>
+        <h1>学院们</h1>
         <el-row v-for="sub in row" :key="sub">
             <!-- 每行固定显示4个 -->
             <!-- 显示 共个数/4行 -->

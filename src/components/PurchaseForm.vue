@@ -1,13 +1,13 @@
 <template>
     <div>
-        Product Page
+        Hello World
     </div>
 </template>
 
 <script>
     export default{
-        data(){ 
-            
+        data(){
+
         },
         methods: {
 
@@ -18,4 +18,4 @@
 <style scoped>
 
 </style>
-
+ 

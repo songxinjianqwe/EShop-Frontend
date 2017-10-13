@@ -147,10 +147,11 @@ export default {
       })
     }
   },
-  //当刷新时，检查localStorage，如果有用户数据，说明仍在登录状态
+  // 当刷新时，检查localStorage，如果有用户数据，说明仍在登录状态
   created() {
     this.checkLoginState()
-  }
+  },
+  
 }
 </script>
 
@@ -168,6 +169,7 @@ body {
   padding: 0;
   position: relative;
 }
+
 
 
 
@@ -253,11 +255,13 @@ body {
 
 
 
+
 /* content */
 
 .app-content {
   padding-bottom: 100px;
 }
+
 
 
 
