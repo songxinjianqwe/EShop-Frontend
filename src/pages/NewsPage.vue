@@ -1,6 +1,6 @@
 <template>
     <div>
-        Hello World
+        News Page
     </div>
 </template>
 

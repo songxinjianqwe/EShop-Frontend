@@ -9,8 +9,13 @@ import ForgetPasswordPage from '@/pages/ForgetPasswordPage'
 import ResetPasswordPage from '@/pages/ResetPasswordPage'
 import LoginPage from '@/pages/LoginPage'
 import CategoryPage from '@/pages/CategoryPage'
+import CategoryInfoPage from '@/pages/CategoryInfoPage'
 import ProductPage from '@/pages/ProductPage'
+import ProductInfoPage from '@/pages/ProductInfoPage'
 import NewsPage from '@/pages/NewsPage'
+import NewsInfoPage from '@/pages/NewsInfoPage'
+import UserPage from '@/pages/UserPage'
+import MailPage from '@/pages/MailPage'
 
 Vue.use(Router)
 // main.js引入了VueRouter，所有的页面路由都写到router/index.js这个文件里
@@ -23,12 +28,21 @@ export default new Router({
       component: Index
     },
     {
+      path: '/users/:id',
+      component: UserPage
+    },
+    {
+      path: '/users/:id/mails',
+      component: MailPage
+    },
+    {
       path: '/login',
       component: LoginPage
     },
     {
       path: '/register',
       component: RegisterPage,
+      // chilren意味着一定会有<router-view>
       children: [
         {
           path: 'form',
@@ -57,12 +71,24 @@ export default new Router({
       component: CategoryPage
     },
     {
+      path: '/categories/:id',
+      component: CategoryInfoPage
+    },
+    {
       path: '/products',
       component: ProductPage
     },
     {
+      path: '/products/:id',
+      component: ProductInfoPage
+    },
+    {
       path: '/news',
       component: NewsPage
+    },
+    {
+      path: '/news/:id',
+      component: NewsInfoPage
     }
   ]
 })

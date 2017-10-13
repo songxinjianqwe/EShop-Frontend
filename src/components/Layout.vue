@@ -8,23 +8,44 @@
         </router-link>
         <!-- nav是navigation导航栏的简写 -->
         <div class="header-nav">
-          <ul class="nav-list">
-            <!-- 如果登录，那么这里会显示：用户名|退出|关于 -->
-            <!-- 如果未登录，那么这里会显示：登录|注册|关于 -->
-            <li v-if="isLogin">{{loginResult.username}}</li>
-            <li v-if="isLogin" class="nav-pile">|</li>
-            <li v-if="isLogin" @click="logout">退出</li>
-            <router-link v-if="!isLogin" to="/login">
-              <li>登录</li>
-            </router-link>
-            <li class="nav-pile">|</li>
-            <router-link v-if="!isLogin" to="/register/form">
-              <li>注册</li>
-            </router-link>
-            <li v-if="!isLogin" class="nav-pile">|</li>
-            <!-- 在@click中可以直接写表达式 -->
-            <li @click="aboutDialogVisible = true">关于</li>
-          </ul>
+
+          <!-- 如果登录，那么这里会显示：用户名|站内信|退出|关于 -->
+          <div v-if="isLogin">
+            <ul class="nav-list">
+              <router-link :to="'/users/' + loginResult.id">
+                <li>{{loginResult.username}}</li>
+              </router-link>
+              <li class="nav-pile">|</li>
+              <router-link :to="'/users/' + loginResult.id + '/mails'">
+                <li @click="getMails">
+                  <el-badge :value="mailCount" :max="99" class="mail-badge">
+                    站内信
+                  </el-badge>
+                </li>
+              </router-link>
+              <li class="nav-pile">|</li>
+              <li @click="logout">退出</li>
+              <li class="nav-pile">|</li>
+              <!-- 在@click中可以直接写语句 -->
+              <li @click="aboutDialogVisible = true">关于</li>
+            </ul>
+          </div>
+
+          <!-- 如果未登录，那么这里会显示：登录|注册|关于 -->
+          <div v-else>
+            <ul class="nav-list">
+              <router-link v-if="!isLogin" to="/login">
+                <li>登录</li>
+              </router-link>
+              <li class="nav-pile">|</li>
+              <router-link v-if="!isLogin" to="/register/form">
+                <li>注册</li>
+              </router-link>
+              <li class="nav-pile">|</li>
+              <!-- 在@click中可以直接写语句 -->
+              <li @click="aboutDialogVisible = true">关于</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -42,14 +63,9 @@
       <p> 2017 ESHOP </p>
     </div>
 
-    <!-- Login Dialog
-                <el-dialog title="登录" :visible.sync="loginDialogVisible">
-                  <login-form @login-success="onLoginSuccess" @forget-password="onForgetPassword"></login-form>
-                </el-dialog> -->
-
     <!-- About Dialog -->
     <el-dialog title="关于" :visible.sync="aboutDialogVisible" size="small">
-      <p>EShop</p><br><br>
+      <p>EShop 数字产品售卖系统</p><br><br>
       <p>Based On Vue.js,Vue-router,Axios,Element-ui</p>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="aboutDialogVisible = false">确 定</el-button>
@@ -76,16 +92,19 @@ export default {
       isLogin: false,
       loginResult: null,
       logoutDialogVisible: false,
-      aboutDialogVisible: false
+      aboutDialogVisible: false,
+      mailCount: 0
     }
   },
   methods: {
+    //每次页面刷新都到localStorage查询是否有用户信息 
     checkLoginState() {
       if (localStorage.getItem('loginResult') !== null) {
         this.isLogin = true
         this.loginResult = JSON.parse(localStorage.getItem('loginResult'))
         console.log('isLogin:', this.isLogin)
         console.log('loginResult:', this.loginResult)
+        this.getMails()
       } else {
         console.log('localStorage为空')
       }
@@ -100,7 +119,6 @@ export default {
       });
 
       localStorage.clear('loginResult')
-
       console.log("删除服务器的token")
       let header = { 'Authentication': this.loginResult.token }
       this.axios.delete("/tokens", { headers: header }).then(function(response) {
@@ -108,6 +126,23 @@ export default {
         that.isLogin = false
         that.loginResult = null
       }).catch(function(error) {
+        throw error
+      })
+    },
+    getMails() {
+      let params = {
+        target: "receiver",
+        mail_status: "NOT_VIEWED"
+      }
+      let header = { 'Authentication': this.loginResult.token }
+
+      let that = this
+      //获取未读站内信数
+      this.axios.get("/mails/" + this.loginResult.id + "/size", { params: params, headers: header }).then(function(response) {
+        that.mailCount = response.data
+        console.log("mailCount:", that.mailCount)
+      }).catch(function(error) {
+        console.log(error)
         throw error
       })
     }
@@ -133,6 +168,27 @@ body {
   padding: 0;
   position: relative;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -187,11 +243,31 @@ body {
 
 
 
+
+
+
+
+
+
+
+
+
+
 /* content */
 
 .app-content {
   padding-bottom: 100px;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -224,5 +300,9 @@ ul {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.mail-badge {
+  margin-top: 0px;
 }
 </style>

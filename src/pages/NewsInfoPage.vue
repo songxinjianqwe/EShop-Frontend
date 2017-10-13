@@ -1,13 +1,13 @@
 <template>
     <div>
-        Product Page
+        NewsInfo Page {{$route.params.id}}
     </div>
 </template>
 
 <script>
     export default{
-        data(){ 
-            
+        data(){
+
         },
         methods: {
 

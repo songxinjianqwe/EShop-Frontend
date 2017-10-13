@@ -27,9 +27,9 @@
                 <!-- 右侧走马灯 -->
                 <div class="index-right-carousel">
                     <el-carousel height="490px">
-                        <el-carousel-item v-for="item in ads" :key="item.product.id">
-                            <router-link :to="'/products/'+item.product.id">
-                                <img :src="item.src">
+                        <el-carousel-item v-for="item in promotedProducts" :key="item.id">
+                            <router-link :to="'/products/'+item.id">
+                                <img :src="item.imageUrl">
                             </router-link>
                         </el-carousel-item>
                     </el-carousel>
@@ -37,9 +37,10 @@
 
                 <!-- 右侧公告板 -->
                 <div class="index-board-list">
-                    <div class="index-board-item" v-for="(item,index) in board" :class="[{'line-last' : index % 2 !== 0}, 'index-board-' + item.alias]" :key="item.id">
+                    <div class="index-board-item" v-for="(item,index) in board" :class="[{'line-last' : index % 2 !== 0}]" :key="item.id">
                         <!-- 每块板 -->
-                        <div class="index-board-item-inner">
+                        <!-- 动态加载背景图片 -->
+                        <div class="index-board-item-inner" :style="{background: 'url(' + item.imageUrl+' ) no-repeat'}">
                             <h2>{{ item.name }}</h2>
                             <p>{{ item.description }}</p>
                             <div class="index-board-button">
@@ -59,19 +60,13 @@ export default {
 
     data() {
         return {
-            imageMappings: {
-                "algo.jpg": require("../assets/carousel/algo.jpg"),
-                "android.jpg": require("../assets/carousel/android.jpg"),
-                "react-native.jpg": require("../assets/carousel/react-native.jpg"),
-                "react.jpg": require("../assets/carousel/react.jpg"),
-            },
             products: [],
             defaultProps: {
                 children: 'products',
                 label: 'name'
             },
             news: [],
-            ads: [],
+            promotedProducts: [],
             board: []
         }
     },
@@ -89,7 +84,10 @@ export default {
         let that = this
 
         //init products
-        this.axios.get("/products/categories").then(function(response) {
+        let param = {
+            containsProducts: true
+        }
+        this.axios.get("/products/categories", { params: param }).then(function(response) {
             console.log("读取products")
             console.log(response.data)
             response.data.forEach(function(item) {
@@ -110,16 +108,12 @@ export default {
             throw error
         })
 
-        //init ads
-        this.axios.get("/ads").then(function(response) {
-            console.log("读取ads")
-            console.log(response.data)
-            response.data.forEach(function(item) {
-                console.log(that.imageMappings[item.imageSrc])
-                that.ads.push({ "product": item.product, "src": that.imageMappings[item.imageSrc] })
-            })
-            console.log("初始化ads完毕")
-            console.log(that.ads)
+        //init promotedProducts
+        this.axios.get("/products/on_promotion").then(function(response) {
+            console.log("promotedProducts")
+            that.promotedProducts = response.data
+            console.log("初始化promotedProducts完毕")
+            console.log(that.promotedProducts)
         }).catch(function(error) {
             throw error
         })
@@ -152,16 +146,6 @@ export default {
     float: left;
     width: 900px;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -199,9 +183,11 @@ export default {
     padding: 5px;
 }
 
-.click-h2:hover{
+.click-h2:hover {
     background: rgb(128, 255, 128)
 }
+
+
 
 
 
@@ -238,29 +224,6 @@ export default {
     padding-left: 120px;
 }
 
-.index-board-JavaEE .index-board-item-inner {
-    background: url(../assets/board/JavaEE.png) no-repeat;
-}
-
-.index-board-Android .index-board-item-inner {
-    background: url(../assets/board/Android.png) no-repeat;
-}
-
-.index-board-IOS .index-board-item-inner {
-    background: url(../assets/board/IOS.png) no-repeat;
-}
-
-.index-board-DataAnalysis .index-board-item-inner {
-    background: url(../assets/board/DataAnalysis.png) no-repeat;
-}
-
-.index-board-Web .index-board-item-inner {
-    background: url(../assets/board/Web.png) no-repeat;
-}
-
-.index-board-UI .index-board-item-inner {
-    background: url(../assets/board/UI.png) no-repeat;
-}
 
 .index-board-item h2 {
     font-size: 18px;
@@ -293,6 +256,8 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+
 
 
 

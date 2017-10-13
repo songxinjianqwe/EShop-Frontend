@@ -1,12 +1,13 @@
 <template>
     <div>
-        Product Page
+        User Page
+        {{$route.params.id}}
     </div>
 </template>
 
 <script>
     export default{
-        data(){ 
+        data(){
             
         },
         methods: {
