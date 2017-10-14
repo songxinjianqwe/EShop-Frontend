@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div class="pay">
+        <el-input type="password" v-model="paymentPassword" placeholder="请输入支付密码"></el-input>
+        <el-button class="btn" type="success" size="larget" @click="pay">确认支付</el-button>
     </div>
 </template>
 
@@ -7,33 +9,57 @@
 export default {
     data() {
         return {
-            status: ''
+            paymentPassword: ''
         }
     },
     methods: {
         pay() {
-            let orderId = this.$route.query.orderId
-            if(orderId === undefined){
-                this.status = '支付失败'
-                return 
+            if (this.paymentPassword === '') {
+                this.$alert('请输入支付密码', '支付密码', {
+                    confirmButtonText: '确定'
+                });
+                return
             }
-            let token = JSON.parse(localStorage.getItem('loginResult')).token
-            let header = { 'Authentication': token }
+            let orderId = this.$route.query.orderId
+            let loginResult = JSON.parse(localStorage.getItem('loginResult'))
+            let header = { 'Authentication': loginResult.token }
             let that = this
-            this.axios.post(`/pay/${orderId}`,{headers: header}).then(function(response){
+            let params = new URLSearchParams();
+            params.append('payment_password', this.paymentPassword);
+            this.axios.post(`/pay/${orderId}`, params, { headers: header }).then(function(response) {
                 console.log('支付成功')
-            }).catch(function(error){
+                that.$message('支付成功，将跳转至用户订单页面')
+                that.$router.push(`/users/${loginResult.id}/orders`)
+            }).catch(function(error) {
                 console.log('支付失败')
+                that.$message('支付失败，将跳转至主页')
+                that.$router.push('/')
             })
         }
     },
     created() {
-        this.pay()
+        //!字符串 会产生一个boolean值
+        if (!("orderId" in this.$route.query)) {
+            //地址有误，跳转回主页
+            this.$message('地址有误，将跳转至主页')
+            console.log('地址有误')
+            this.$router.push('/')
+        }
     }
 }
 </script>
 
 <style scoped>
+.pay {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 200px;
+}
 
+.btn {
+    margin-top: 20px;
+}
 </style>
 

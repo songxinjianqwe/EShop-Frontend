@@ -16,6 +16,7 @@ import NewsInfoPage from '@/pages/NewsInfoPage'
 import UserPage from '@/pages/UserPage'
 import MailPage from '@/pages/MailPage'
 import PayPage from '@/pages/PayPage'
+import OrderPage from '@/pages/OrderPage'
 
 Vue.use(Router)
 // main.js引入了VueRouter，所有的页面路由都写到router/index.js这个文件里
@@ -34,6 +35,10 @@ const router = new Router({
     {
       path: '/users/:id/mails',
       component: MailPage
+    },
+    {
+      path: '/users/:id/orders',
+      component: OrderPage
     },
     {
       path: '/login',
