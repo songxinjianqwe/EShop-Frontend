@@ -20,3 +20,4 @@ new Vue({
   template: '<Layout/>',
   components: { Layout }
 })
+

@@ -1,10 +1,25 @@
 <template>
     <div class="product">
-        ProductInfo Page {{$route.params.id}}
+        <div class="left-products">
+            <div class="product-board">
+                <img :src="product.imageUrl"></img>
+                <ul>
+                    <!-- 如果当前的url与某一个link的to值相同，那么该link的class被设置为active -->
+                    <router-link v-for="item in otherProducts" :key="item.id" :to="{path: `/products/${item.id}`}" tag="li" active-class="active">
+                        {{item.name}}
+                    </router-link>
+                </ul>
+            </div>
+        </div>
+        <div class="right-purchase">
+            <order-place-form :selectedProduct="product"></order-place-form>
+        </div>
     </div>
 </template>
 
 <script>
+import OrderPlaceForm from '@/components/OrderPlaceForm'
+
 export default {
     data() {
         return {
@@ -19,35 +34,93 @@ export default {
                 console.log('产品数据加载完毕')
                 that.product = response.data
                 console.log(that.product)
-                that.axios.get("/products/by_category/" + that.product.category.id + "/simple").then(function(response) {
-                    console.log('其他产品数据加载完毕')
-                    that.otherProducts = response.data
-                    console.log(that.otherProducts)
-                }).catch(function(error) {
-                    throw error
-                })
+                if (that.otherProducts.length === 0) {
+                    that.fetchOtherProducts(that)
+                }
+            }).catch(function(error) {
+                throw error
+            })
+        },
+        fetchOtherProducts() {
+            let that = this
+            this.axios.get("/products/by_category/" + this.product.category.id + "/simple").then(function(response) {
+                console.log('其他产品数据加载完毕')
+                that.otherProducts = response.data
+                console.log(that.otherProducts)
             }).catch(function(error) {
                 throw error
             })
         }
-
     },
+    components: {
+        OrderPlaceForm
+    },
+    //第一次访问时被调用
+    created() {
+        console.log('created called')
+        this.fetchProduct()
+    },
+    //在/products/:id <=> 其他页面 之间跳转时被调用
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            // 通过 `vm` 访问组件实例
-            console.log('跳转至', to.path)
+            console.log('beforeRouteEnter:跳转至', to.path)
             vm.fetchProduct()
         })
+    },
+    //在/products/1 <=> /products/2 之间跳转时被调用
+    beforeRouteUpdate(to, from, next) {
+        console.log('beforeRouteUpdate:跳转至', to.path)
+        next()
+        //必须调用next才能完成跳转，而且要先于访问this
+        this.fetchProduct()
     }
 }
 </script>
 
 <style scoped>
 .product {
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.left-products {
+    float: left;
+    width: 240px;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
+}
+
+.right-purchase {
+    float: left;
+    width: 300px;
+    text-align: center;
+    margin-left: 300px;
+}
+
+img {
+    width: 240px;
+    height: 135px;
+}
+
+.product-board {
+    background: #fff;
+}
+
+.product-board li {
+    text-align: left;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.product-board li.active,
+.product-board li:hover {
+    background: #4fc08d;
+    color: #fff;
+}
+
+.product-board li a {
+    display: block;
 }
 </style>
 

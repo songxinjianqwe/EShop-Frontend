@@ -74,7 +74,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             // 通过 `vm` 访问组件实例
-            console.log('跳转至',to.path)
+            console.log('beforeRouteEnter:跳转至',to.path)
             vm.fetchCategoryInfo()
             vm.fetchProducts()
         })
