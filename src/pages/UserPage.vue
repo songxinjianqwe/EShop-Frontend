@@ -1,5 +1,5 @@
 <template>
-    <div class="user-info">
+    <div class="user-page">
         <div class="left-wapper">
             <div class="avatar-mode">
                 <img :src="user.avatar"></img>
@@ -64,10 +64,10 @@ export default {
 
 <style scoped>
 /* 当超过height时会出现滚动条 */
-
-.user-info {
+.user-page {
     height: 500px;
     overflow: auto;
+    width: 100%;
 }
 
 .avatar-mode {
@@ -92,12 +92,9 @@ img {
     width: 200px;
     text-align: center;
 }
-
 .right-wapper {
-    float: left;
-    width: 300px;
     text-align: center;
-    margin-left: 300px;
+    margin-left: 100px;
     margin-top: 20px;
 }
 

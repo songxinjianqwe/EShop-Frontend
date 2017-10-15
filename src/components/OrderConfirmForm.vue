@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table :data="[order]" style="width: 100%">
+        <el-table class="confirm-table" :data="[order]" style="width: 100%">
             <el-table-column prop="product.name" label="名称" width="180">
             </el-table-column>
             <el-table-column prop="product.type" label="类型" width="180">
@@ -33,7 +33,7 @@ export default {
                 this.$message('下单成功')
                 let orderId = response.data.id
                 this.$router.push({ path: `/pay`, query: { 'orderId': orderId } })
-            }).catch((error)=>{
+            }).catch((error) => {
                 throw error
             })
         }
@@ -42,5 +42,7 @@ export default {
 </script>
 
 <style scoped>
-
+.confirm-table {
+    text-align: left;
+}
 </style>

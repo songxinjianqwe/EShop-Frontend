@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="user-info">
         <el-form ref="copiedUser" :model="copiedUser" label-width="80px">
             <el-form-item label="用户名" prop="copiedUsername">
                 {{copiedUser.username}}
@@ -89,5 +89,10 @@ export default {
 </script>
 
 <style scoped>
-
+.user-info {
+    float: left;
+    width: 300px;
+    margin-left: 300px;
+    text-align: center;
+}
 </style>
