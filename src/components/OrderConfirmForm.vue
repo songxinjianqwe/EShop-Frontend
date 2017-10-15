@@ -26,15 +26,14 @@ export default {
         placeOrder() {
             console.log('订单详情')
             console.log(this.order)
-            let that = this
             let token = JSON.parse(localStorage.getItem('loginResult')).token
             let header = { 'Authentication': token }
-            this.axios.post("/orders", this.order, { headers: header }).then(function(response) {
+            this.axios.post("/orders", this.order, { headers: header }).then((response) => {
                 console.log('下单成功')
-                that.$message('下单成功')
+                this.$message('下单成功')
                 let orderId = response.data.id
-                that.$router.push({path:`/pay`,query:{'orderId':orderId}})
-            }).catch(function(error) {
+                this.$router.push({ path: `/pay`, query: { 'orderId': orderId } })
+            }).catch((error)=>{
                 throw error
             })
         }

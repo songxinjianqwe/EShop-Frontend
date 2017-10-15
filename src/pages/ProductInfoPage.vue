@@ -29,25 +29,23 @@ export default {
     },
     methods: {
         fetchProduct() {
-            let that = this
-            this.axios.get("/products/" + this.$route.params.id).then(function(response) {
+            this.axios.get("/products/" + this.$route.params.id).then((response) => {
                 console.log('产品数据加载完毕')
-                that.product = response.data
-                console.log(that.product)
-                if (that.otherProducts.length === 0) {
-                    that.fetchOtherProducts(that)
+                this.product = response.data
+                console.log(this.product)
+                if (this.otherProducts.length === 0) {
+                    this.fetchOtherProducts(this)
                 }
-            }).catch(function(error) {
+            }).catch((error) => {
                 throw error
             })
         },
         fetchOtherProducts() {
-            let that = this
-            this.axios.get("/products/by_category/" + this.product.category.id + "/simple").then(function(response) {
+            this.axios.get("/products/by_category/" + this.product.category.id + "/simple").then((response) => {
                 console.log('其他产品数据加载完毕')
-                that.otherProducts = response.data
-                console.log(that.otherProducts)
-            }).catch(function(error) {
+                this.otherProducts = response.data
+                console.log(this.otherProducts)
+            }).catch((error) => {
                 throw error
             })
         }

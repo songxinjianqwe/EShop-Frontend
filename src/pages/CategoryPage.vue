@@ -31,11 +31,12 @@ export default {
     },
     methods: {
         fetchCategories() {
-            var that = this
-            this.axios.get("/products/categories").then(function(response) {
-                that.categories = response.data
-                that.row = that.categories.length % 4 === 0 ? that.categories.length / 4 : that.categories.length / 4 + 1
-                console.log(that.categories)
+            this.axios.get("/products/categories").then((response)=>{
+                this.categories = response.data
+                this.row = this.categories.length % 4 === 0 ? this.categories.length / 4 : this.categories.length / 4 + 1
+                console.log(this.categories)
+            }).catch((error)=>{
+                throw error
             })
         }
     },

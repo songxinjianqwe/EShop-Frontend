@@ -81,49 +81,47 @@ export default {
         }
     },
     created() {
-        let that = this
-
         //init products
         let param = {
             containsProducts: true
         }
-        this.axios.get("/products/categories", { params: param }).then(function(response) {
+        this.axios.get("/products/categories", { params: param }).then((response) => {
             console.log("读取products")
             console.log(response.data)
-            response.data.forEach(function(item) {
-                that.products.push({ "name": item.name, "products": item.products })
+            response.data.forEach((item) => {
+                this.products.push({ "name": item.name, "products": item.products })
             })
             console.log("初始化products完毕")
-            console.log(that.products)
-        }).catch(function(error) {
+            console.log(this.products)
+        }).catch((error) => {
             throw error
         })
 
         //init news
-        this.axios.get("/news/latest").then(function(response) {
+        this.axios.get("/news/latest").then((response) => {
             console.log("读取news")
             console.log(response.data)
-            that.news = response.data
-        }).catch(function(error) {
+            this.news = response.data
+        }).catch((error) => {
             throw error
         })
 
         //init promotedProducts
-        this.axios.get("/products/on_promotion").then(function(response) {
+        this.axios.get("/products/on_promotion").then((response) => {
             console.log("promotedProducts")
-            that.promotedProducts = response.data
+            this.promotedProducts = response.data
             console.log("初始化promotedProducts完毕")
-            console.log(that.promotedProducts)
-        }).catch(function(error) {
+            console.log(this.promotedProducts)
+        }).catch((error) => {
             throw error
         })
 
         //init board
-        this.axios.get("/products/categories/on_board").then(function(response) {
+        this.axios.get("/products/categories/on_board").then((response) => {
             console.log("读取board")
             console.log(response.data)
-            that.board = response.data
-        }).catch(function(error) {
+            this.board = response.data
+        }).catch((error) => {
             throw error
         })
     }
@@ -146,6 +144,12 @@ export default {
     float: left;
     width: 900px;
 }
+
+
+
+
+
+
 
 
 
@@ -186,6 +190,12 @@ export default {
 .click-h2:hover {
     background: rgb(128, 255, 128)
 }
+
+
+
+
+
+
 
 
 
@@ -256,6 +266,12 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+
+
+
+
+
 
 
 

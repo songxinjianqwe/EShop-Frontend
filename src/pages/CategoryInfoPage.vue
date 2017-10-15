@@ -37,27 +37,25 @@ export default {
     },
     methods: {
         fetchCategoryInfo() {
-            let that = this
-            this.axios.get("/products/categories/" + this.$route.params.id).then(function(response) {
-                that.category = response.data
+            this.axios.get("/products/categories/" + this.$route.params.id).then((response) => {
+                this.category = response.data
                 console.log('产品类别数据加载完毕')
-                console.log(that.category)
-            }).catch(function(error) {
+                console.log(this.category)
+            }).catch((error) => {
                 throw error
             })
         },
         fetchProducts() {
-            let that = this
             let param = {
                 pageNum: this.pageNum,
                 pageSize: this.pageSize
             }
-            this.axios.get("/products/by_category/" + this.$route.params.id, { params: param }).then(function(response) {
+            this.axios.get("/products/by_category/" + this.$route.params.id, { params: param }).then((response) => {
                 console.log('当前页产品数据加载完毕')
-                that.products = response.data.list
-                that.pages = response.data.pages
-                console.log(that.products)
-            }).catch(function(error) {
+                this.products = response.data.list
+                this.pages = response.data.pages
+                console.log(this.products)
+            }).catch((error) => {
                 throw error
             })
         },
@@ -74,7 +72,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             // 通过 `vm` 访问组件实例
-            console.log('beforeRouteEnter:跳转至',to.path)
+            console.log('beforeRouteEnter:跳转至', to.path)
             vm.fetchCategoryInfo()
             vm.fetchProducts()
         })
@@ -89,6 +87,10 @@ export default {
     margin-right: auto;
     margin-top: 20px;
 }
+
+
+
+
 
 /* 以下均为el组件的css */
 

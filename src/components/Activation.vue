@@ -24,19 +24,18 @@ export default {
             }
         },
         send() {
-            let that = this;
-            that.sendMsgDisabled = true
+            this.sendMsgDisabled = true
 
             //页面间传参
-            this.axios.post("/users/" + this.$route.params.id + "/mail_validation").then(function(response) {
+            this.axios.post("/users/" + this.$route.params.id + "/mail_validation").then((response) => {
                 console.log(response.data)
-            }).catch(function(error) {
+            }).catch((error) => {
                 throw error
             })
-            let interval = window.setInterval(function() {
-                if ((that.time--) <= 0) {
-                    that.time = 60;
-                    that.sendMsgDisabled = false;
+            let interval = window.setInterval(() => {
+                if ((this.time--) <= 0) {
+                    this.time = 60;
+                    this.sendMsgDisabled = false;
                     window.clearInterval(interval);
                 }
             }, 1000);

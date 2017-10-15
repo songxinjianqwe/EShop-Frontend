@@ -6,9 +6,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import axios from 'axios'
 import Layout from '@/components/Layout'
+import Util from '@/plugins/Utility.js'
 
 axios.defaults.baseURL = 'http://localhost:8080'
 Vue.use(ElementUI)
+Vue.use(Util)
 // 这样所有Vue组件中都可以通过this.axios来使用
 Vue.prototype.axios = axios
 

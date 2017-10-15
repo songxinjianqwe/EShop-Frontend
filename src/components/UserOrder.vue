@@ -1,14 +1,17 @@
 <template>
     <div>
-        Mail Page 
-        UserId:{{$route.params.id}}
+        UserOrder
+        {{user.phone}}
     </div>
 </template>
 
 <script>
     export default{
+        props: ['user','token'],
         data(){
-
+            return {
+                
+            }
         },
         methods: {
 
@@ -19,4 +22,3 @@
 <style scoped>
 
 </style>
-

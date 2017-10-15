@@ -14,20 +14,19 @@ export default {
     },
     methods: {
         validate() {
-            let that = this
             let id = this.$route.params.activationId
             let code = this.$route.params.activationCode
             let params = new URLSearchParams();
             params.append('activationCode', code)
-            this.axios.post("/users/" + id + "/activation", params).then(function(response) {
-                that.username = response.data.username
-                const h = that.$createElement;
-                that.$notify({
+            this.axios.post("/users/" + id + "/activation", params).then((response) => {
+                this.username = response.data.username
+                const h = this.$createElement;
+                this.$notify({
                     title: '注册成功',
                     message: h('i', { style: 'color: teal' }, '欢迎您加入我们')
                 })
-                that.$emit('register-success')
-            }).catch(function(error) {
+                this.$emit('register-success')
+            }).catch((error) => {
                 console.log(error)
                 throw error
             })

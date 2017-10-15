@@ -23,17 +23,16 @@ export default {
             let orderId = this.$route.query.orderId
             let loginResult = JSON.parse(localStorage.getItem('loginResult'))
             let header = { 'Authentication': loginResult.token }
-            let that = this
             let params = new URLSearchParams();
             params.append('payment_password', this.paymentPassword);
-            this.axios.post(`/pay/${orderId}`, params, { headers: header }).then(function(response) {
+            this.axios.post(`/pay/${orderId}`, params, { headers: header }).then((response) => {
                 console.log('支付成功')
-                that.$message('支付成功，将跳转至用户订单页面')
-                that.$router.push(`/users/${loginResult.id}/orders`)
-            }).catch(function(error) {
+                this.$message('支付成功，将跳转至用户订单页面')
+                this.$router.push(`/users/${loginResult.id}/orders`)
+            }).catch((error) => {
                 console.log('支付失败')
-                that.$message('支付失败，将跳转至主页')
-                that.$router.push('/')
+                this.$message('支付失败，将跳转至主页')
+                this.$router.push('/')
             })
         }
     },

@@ -12,7 +12,7 @@
           <!-- 如果登录，那么这里会显示：用户名|站内信|退出|关于 -->
           <div v-if="isLogin">
             <ul class="nav-list">
-              <router-link :to="'/users/' + loginResult.id">
+              <router-link :to="'/users/' + loginResult.id+'/info'">
                 <li>{{loginResult.username}}</li>
               </router-link>
               <li class="nav-pile">|</li>
@@ -111,7 +111,6 @@ export default {
     },
     /**当退出登录时，会提示信息，并删除本地的localStorage，本地的内存数据，以及服务器的token */
     logout() {
-      let that = this
       const h = this.$createElement;
       this.$notify({
         title: '退出成功',
@@ -121,11 +120,11 @@ export default {
       localStorage.clear('loginResult')
       console.log("删除服务器的token")
       let header = { 'Authentication': this.loginResult.token }
-      this.axios.delete("/tokens", { headers: header }).then(function(response) {
+      this.axios.delete("/tokens", { headers: header }).then((response) => {
         console.log(response.data)
-        that.isLogin = false
-        that.loginResult = null
-      }).catch(function(error) {
+        this.isLogin = false
+        this.loginResult = null
+      }).catch((error) => {
         throw error
       })
     },
@@ -136,12 +135,11 @@ export default {
       }
       let header = { 'Authentication': this.loginResult.token }
 
-      let that = this
       //获取未读站内信数
-      this.axios.get("/mails/" + this.loginResult.id + "/size", { params: params, headers: header }).then(function(response) {
-        that.mailCount = response.data
-        console.log("mailCount:", that.mailCount)
-      }).catch(function(error) {
+      this.axios.get("/mails/" + this.loginResult.id + "/size", { params: params, headers: header }).then((response) => {
+        this.mailCount = response.data
+        console.log("mailCount:", this.mailCount)
+      }).catch((error) => {
         console.log(error)
         throw error
       })
@@ -151,7 +149,7 @@ export default {
   created() {
     this.checkLoginState()
   },
-  
+
 }
 </script>
 
@@ -169,6 +167,8 @@ body {
   padding: 0;
   position: relative;
 }
+
+
 
 
 
@@ -256,11 +256,15 @@ body {
 
 
 
+
+
 /* content */
 
 .app-content {
   padding-bottom: 100px;
 }
+
+
 
 
 

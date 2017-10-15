@@ -21,20 +21,19 @@ export default {
                 });
                 return
             }
-            let that = this
             let id = this.$route.params.validationId
             let code = this.$route.params.validationCode
             let params = { validationCode: code, password: this.newPassword }
-            this.axios.put("/users/" + id + "/password", params).then(function(response) {
-                that.username = response.data.username
-                const h = that.$createElement;
-                that.$notify({
+            this.axios.put("/users/" + id + "/password", params).then((response) => {
+                this.username = response.data.username
+                const h = this.$createElement;
+                this.$notify({
                     title: '修改密码成功',
                     message: h('i', { style: 'color: teal' }, '下次不要在忘记密码了呦')
                 })
-            }).catch(function(error) {
-                const h = that.$createElement;
-                that.$notify({
+            }).catch((error) => {
+                const h = this.$createElement;
+                this.$notify({
                     title: '修改密码失败',
                     message: h('i', { style: 'color: teal' }, '请重新进行验证')
                 })

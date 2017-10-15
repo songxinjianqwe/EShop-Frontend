@@ -41,20 +41,19 @@ export default {
                 })
                 return
             }
-            let that = this;
-            that.sendMsgDisabled = true
+            this.sendMsgDisabled = true
             let params = new URLSearchParams();
             params.append('mode', this.mode)
             //发送验证请求，如果没有抛出异常，那么说明发送成功
-            this.axios.post("/users/" + this.key + "/password/reset_validation", params).then(function(response) {
+            this.axios.post("/users/" + this.key + "/password/reset_validation", params).then((response) => {
                 console.log("发送成功")
-            }).catch(function(error) {
+            }).catch((error) => {
                 throw error
             })
-            let interval = window.setInterval(function() {
-                if ((that.time--) <= 0) {
-                    that.time = 60;
-                    that.sendMsgDisabled = false;
+            let interval = window.setInterval(() => {
+                if ((this.time--) <= 0) {
+                    this.time = 60;
+                    this.sendMsgDisabled = false;
                     window.clearInterval(interval);
                 }
             }, 1000);

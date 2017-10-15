@@ -9,7 +9,7 @@
                 <el-input type="password" v-model="loginForm.password" auto-complete="off" size="tiny"></el-input>
             </el-form-item>
             <el-form-item label="验证码" prop="captchaValue">
-                <el-input v-model="loginForm.captchaValue" auto-complete="off" size="tiny" ></el-input>
+                <el-input v-model="loginForm.captchaValue" auto-complete="off" size="tiny"></el-input>
             </el-form-item>
             <el-form-item class="item">
                 <el-button @click="fetchCaptcha">换一张</el-button>
@@ -42,40 +42,38 @@ export default {
     },
     methods: {
         fetchCaptcha() {
-            let that = this
-            this.axios.get("/captchas").then(function(response) {
+            this.axios.get("/captchas").then((response) => {
                 console.log(response.data)
-                that.image = response.data.image
-                that.loginForm.captchaCode = response.data.captchaCode
-            }).catch(function(error) {
+                this.image = response.data.image
+                this.loginForm.captchaCode = response.data.captchaCode
+            }).catch((error) => {
                 throw error
             })
         },
         submitForm() {
             this.errorText = ''
             console.log(this.loginForm)
-            let that = this
-            this.axios.post("/tokens", this.loginForm).then(function(response) {
+            this.axios.post("/tokens", this.loginForm).then((response) => {
                 console.log("登录成功")
                 console.log(response.data)
                 //清空表单
-                that.resetForm()
+                this.resetForm()
                 //发出成功提示
-                const h = that.$createElement;
-                that.$notify({
+                const h = this.$createElement;
+                this.$notify({
                     title: '登录成功',
                     message: h('i', { style: 'color: teal' }, '欢迎您，' + response.data.username)
                 });
                 localStorage.setItem('loginResult', JSON.stringify(response.data))
                 //跳转回主页
-                that.$router.push('/')
+                this.$router.push('/')
                 //刷新当前页面
                 window.location.reload()
-            }).catch(function(error) {
-                that.fetchCaptcha()
+            }).catch((error) => {
+                this.fetchCaptcha()
                 console.log(error)
                 if ("response" in error) {
-                    that.errors = error.response.data.fieldErrors
+                    this.errors = error.response.data.fieldErrors
                 }
             })
         },
