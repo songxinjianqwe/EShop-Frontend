@@ -1,30 +1,49 @@
-# eshop
+# 数字课程售卖系统
 
-> A Vue.js project
+## 用户模块
+- 获取图片验证码
+- 登录:解决重复登录问题
+- 注册
+- 分页查询用户信息
+- 修改用户信息
+- 重置密码
 
-## Build Setup
+## 站内信模块
+- 一对一发送站内信
+- 管理员广播
+- 读取站内信（未读和已读）
+- 一对多发送站内信
+- 分页查询站内信
 
-``` bash
-# install dependencies
-npm install
+## 文件模块
+- 文件上传
+- 文件下载
 
-# serve with hot reload at localhost:8080
-npm run dev
+## 邮件模块
+- 单独发送邮件
+- 群发邮件
+- Thymeleaf邮件模板
 
-# build for production with minification
-npm run build
+## 产品模块
+- 获取所有产品类别
+- 分页获取某一类别的所有产品
+- 获取某一产品的详细信息
+- 添加产品类型
+- 添加某一产品
 
-# build for production and view the bundle analyzer report
-npm run build --report
+## 订单模块
+- 下单，购买某一产品
+- 浏览历史订单
+- 取消订单
 
-# run unit tests
-npm run unit
+## 新闻模块
+- 读取最新新闻
+- 添加新闻
 
-# run e2e tests
-npm run e2e
+## 支付模块
+- 用户充值
+- 订单付款
 
-# run all tests
-npm test
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## TODO
+- 集成腾讯云的云存储，实现图片上传云端
+- 集成markdown编辑器
