@@ -64,6 +64,8 @@ export default {
             this.fetchProducts()
         }
     },
+    //注意!!!! 只有在顶层定义的router，而非是某个children，路由内钩子才有效
+    
     //当第一次访问时会先调用created，再调用beforeRouteEnter
     //如果没有定义created，那么只会调用beforeRouteEnter
     //当从其他页面跳转到当前页面时，会调用beforeRouteEnter，但不会调用created，因为只是处于inactive状态，并未被销毁

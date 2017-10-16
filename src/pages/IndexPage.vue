@@ -17,7 +17,9 @@
                         <h2 class="click-h2">最新消息</h2>
                     </router-link>
                     <li v-for="item in news" :key="item.id">
-                        <a :href="'/news/'+item.id" class="new-item">{{ item.title }}</a>
+                        <router-link :to="'/news/'+item.id" class="new-item">
+                            {{ item.title }}
+                        </router-link>
                     </li>
                 </div>
             </div>
@@ -98,7 +100,7 @@ export default {
         })
 
         //init news
-        this.axios.get("/news/latest").then((response) => {
+        this.axios.get("/news/query/latest").then((response) => {
             console.log("读取news")
             console.log(response.data)
             this.news = response.data
@@ -154,6 +156,7 @@ export default {
 
 
 
+
 /* LeftBlock */
 
 .index-left-block {
@@ -190,6 +193,7 @@ export default {
 .click-h2:hover {
     background: rgb(128, 255, 128)
 }
+
 
 
 
@@ -266,6 +270,7 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 
 
 

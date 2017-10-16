@@ -1,7 +1,7 @@
 <template>
     <div class="pay">
         <el-input type="password" v-model="paymentPassword" placeholder="请输入支付密码"></el-input>
-        <el-button class="btn" type="success" size="larget" @click="pay">确认支付</el-button>
+        <el-button class="btn" type="success" size="large" @click="pay">确认支付</el-button>
     </div>
 </template>
 

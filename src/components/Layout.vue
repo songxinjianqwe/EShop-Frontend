@@ -16,7 +16,7 @@
                 <li>{{loginResult.username}}</li>
               </router-link>
               <li class="nav-pile">|</li>
-              <router-link :to="'/users/' + loginResult.id + '/mails'">
+              <router-link :to="'/users/' + loginResult.id + '/mails/receive'">
                 <li @click="getMails">
                   <el-badge :value="mailCount" :max="99" class="mail-badge">
                     站内信
@@ -127,6 +127,8 @@ export default {
       }).catch((error) => {
         throw error
       })
+      //回到首页
+      this.$router.push('/')
     },
     getMails() {
       let params = {
@@ -136,7 +138,7 @@ export default {
       let header = { 'Authentication': this.loginResult.token }
 
       //获取未读站内信数
-      this.axios.get("/mails/" + this.loginResult.id + "/size", { params: params, headers: header }).then((response) => {
+      this.axios.get("/mails/by_target/" + this.loginResult.id + "/size", { params: params, headers: header }).then((response) => {
         this.mailCount = response.data
         console.log("mailCount:", this.mailCount)
       }).catch((error) => {

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import OrderConfirmForm from '@/components/OrderConfirmForm'
+import OrderConfirmForm from '@/components/order/OrderConfirmForm'
 
 export default {
     props: ['selectedProduct'],

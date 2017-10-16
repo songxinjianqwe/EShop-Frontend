@@ -12,7 +12,7 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="按订单状态"  class="form-item">
+                <el-form-item label="按订单状态" class="form-item">
                     <el-select v-model="query.status">
                         <el-option key="undefined" label="不限" :value="undefined">
                         </el-option>
@@ -26,7 +26,7 @@
                     </el-date-picker>
                 </el-form-item>
 
-                <el-form-item  class="form-item">
+                <el-form-item class="form-item">
                     <el-button type="primary" @click="fetchOrders">查询</el-button>
                 </el-form-item>
             </el-form>
@@ -35,7 +35,7 @@
             <el-table :data="orders.list" stripe style="width: 96%">
                 <el-table-column prop="id" label="订单号" width="100">
                 </el-table-column>
-                <el-table-column prop="product.name" label="产品" width="200">
+                <el-table-column prop="product.name" label="产品" width="150">
                 </el-table-column>
                 <el-table-column prop="quantity" label="数量" width="100">
                 </el-table-column>
@@ -43,7 +43,14 @@
                 </el-table-column>
                 <el-table-column prop="totalPrice" label="总价" width="100">
                 </el-table-column>
-                <el-table-column prop="orderStatus" label="订单状态" width="200">
+                <el-table-column prop="orderStatus" label="订单状态" width="100">
+                </el-table-column>
+                <el-table-column label="操作" width="100" inline-template>
+                    <!-- 参数名必须为row -->
+                    <el-button :disabled="row.orderStatus !== 'UNPAID'" @click="pay(row)">支付</el-button>
+                </el-table-column>
+                <el-table-column label="操作" width="100" inline-template>
+                    <el-button :disabled="row.orderStatus !== 'UNPAID'" @click="cancel(row)">取消</el-button>
                 </el-table-column>
             </el-table>
             <el-pagination style="text-align:center" layout="prev, pager, next" :page-count="pages" @current-change="handleCurrentChange" :current-page.sync="query.pageNum">
@@ -133,6 +140,41 @@ export default {
             }).catch((error) => {
                 throw error
             })
+        },
+        //跳转至支付页面
+        pay(row) {
+            console.log('点击了', row, '行')
+            this.$router.push({ path: `/pay`, query: { 'orderId': row.id } })
+        },
+        //取消订单
+        cancel(row) {
+            console.log('点击了', row, '行')
+            this.$confirm('此操作将取消该订单, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let header = { 'Authentication': this.token }
+                this.axios.put(`/orders/cancel/${row.id}`, null, { headers: header }).then((response) => {
+                    console.log(response.data)
+                    console.log('取消成功')
+                    this.$message({
+                        type: 'success',
+                        message: '取消成功!'
+                    });
+                    //重新加载所有订单信息
+                    this.fetchOrders()
+                }).catch((error) => {
+                    this.$message.error('取消失败!');
+                    throw error
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已放弃取消订单'
+                });
+            });
+
         }
     },
     created() {
@@ -144,15 +186,18 @@ export default {
 
 <style scoped>
 .user-order {
-    margin-left: 200px;
+    margin-left: 250px;
 }
 
 .query-form {
-    margin-left: 200px;
+    margin-left: 300px;
+    width: 300px;
 }
-.form-item{
+
+.form-item {
     height: 50px;
 }
+
 .order-table {
     text-align: left;
 }

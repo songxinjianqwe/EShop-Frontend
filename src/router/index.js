@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/pages/Index'
+import IndexPage from '@/pages/IndexPage'
 import RegisterPage from '@/pages/RegisterPage'
-import RegisterForm from '@/components/RegisterForm'
-import Activation from '@/components/Activation'
-import RegisterValidation from '@/components/RegisterValidation'
+import RegisterForm from '@/components/register/RegisterForm'
+import Activation from '@/components/register/Activation'
+import RegisterValidation from '@/components/register/RegisterValidation'
 import ForgetPasswordPage from '@/pages/ForgetPasswordPage'
 import ResetPasswordPage from '@/pages/ResetPasswordPage'
 import LoginPage from '@/pages/LoginPage'
@@ -15,10 +15,13 @@ import NewsPage from '@/pages/NewsPage'
 import NewsInfoPage from '@/pages/NewsInfoPage'
 import UserPage from '@/pages/UserPage'
 import PayPage from '@/pages/PayPage'
-import UserInfo from '@/components/UserInfo'
-import UserOrder from '@/components/UserOrder'
-import UserMail from '@/components/UserMail'
-import UserPay from '@/components/UserPay'
+import UserInfo from '@/components/user/UserInfo'
+import UserOrder from '@/components/user/UserOrder'
+import UserSendMail from '@/components/mail/UserSendMail'
+import UserReceiveMail from '@/components/mail/UserReceiveMail'
+import UserPostMail from '@/components/mail/UserPostMail'
+import UserPayDeposit from '@/components/pay/UserPayDeposit'
+import UserPayPassword from '@/components/pay/UserPayPassword'
 
 Vue.use(Router)
 // main.js引入了VueRouter，所有的页面路由都写到router/index.js这个文件里
@@ -28,7 +31,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      component: Index
+      component: IndexPage
     },
     {
       path: '/users/:id',
@@ -42,16 +45,28 @@ const router = new Router({
           component: UserInfo
         },
         {
-          path: '/users/:id/mails',
-          component: UserMail
-        },
-        {
           path: '/users/:id/orders',
           component: UserOrder
         },
         {
-          path: '/users/:id/pay',
-          component: UserPay
+          path: '/users/:id/mails/receive',
+          component: UserReceiveMail
+        },
+        {
+          path: '/users/:id/mails/send',
+          component: UserSendMail
+        },
+        {
+          path: '/users/:id/mails/post',
+          component: UserPostMail
+        },
+        {
+          path: '/users/:id/pay/password',
+          component: UserPayPassword
+        },
+        {
+          path: '/users/:id/pay/deposit',
+          component: UserPayDeposit
         }
       ]
     },

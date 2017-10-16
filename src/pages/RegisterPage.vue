@@ -27,12 +27,7 @@ export default {
     },
     methods: {
         changeStep() {
-            //如果不是/register相关的，直接返回，不做改变
-            if(this.$route.path.indexOf('/register') < 0){
-                return 
-            }
-            console.log(this.$route.path)
-            console.log(this.$route.path.split('/')[2])
+            console.log('RegisterPage watching Route')
             let paths = this.$route.path.split('/')
             if (paths.length >= 2) {
                 this.step = this.mapping[paths[2]]
@@ -43,6 +38,9 @@ export default {
             this.step = 3
         }
     },
+    //注意watch只有当route在当前路径或当前路径的后继路径时才会调用
+    //父页面是/register，当访问以/register开头的路径时都会调用
+    //但访问无关页面，比如/login时不会被调用
     watch: {
         '$route': 'changeStep'
     }
@@ -52,7 +50,7 @@ export default {
 <style scoped>
 .registerSteps {
     text-align: center;
-    margin-left: auto;
+    margin-left: 300px;
     margin-right: auto;
     margin-top: 20px;
 }

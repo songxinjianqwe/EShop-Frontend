@@ -12,8 +12,17 @@
                     <el-menu :default-active="$route.path" theme="dark" :router="true">
                         <el-menu-item :index="'/users/'+$route.params.id+'/info'">个人信息</el-menu-item>
                         <el-menu-item :index="'/users/'+$route.params.id+'/orders'">历史订单</el-menu-item>
-                        <el-menu-item :index="'/users/'+$route.params.id+'/mails'">站内信</el-menu-item>
-                        <el-menu-item :index="'/users/'+$route.params.id+'/pay'">支付</el-menu-item>
+                        <el-submenu :index="'/users/'+$route.params.id+'/mails'">
+                            <template slot="title">站内信</template>
+                            <el-menu-item :index="'/users/'+$route.params.id+'/mails/receive'">收件箱</el-menu-item>
+                            <el-menu-item :index="'/users/'+$route.params.id+'/mails/send'">已发送</el-menu-item>
+                            <el-menu-item :index="'/users/'+$route.params.id+'/mails/post'">写邮件</el-menu-item>
+                        </el-submenu>
+                        <el-submenu :index="'/users/'+$route.params.id+'/pay'">
+                            <template slot="title">支付</template>
+                            <el-menu-item :index="'/users/'+$route.params.id+'/pay/password'">密码</el-menu-item>
+                            <el-menu-item :index="'/users/'+$route.params.id+'/pay/deposit'">充值</el-menu-item>
+                        </el-submenu>
                     </el-menu>
                 </el-col>
             </div>
@@ -64,6 +73,7 @@ export default {
 
 <style scoped>
 /* 当超过height时会出现滚动条 */
+
 .user-page {
     height: 500px;
     overflow: auto;
@@ -92,11 +102,8 @@ img {
     width: 200px;
     text-align: center;
 }
-.right-wapper {
-    text-align: center;
-    margin-left: 100px;
-    margin-top: 20px;
-}
+
+
 
 .left-wapper .right-wapper .avator-wapper {
     padding: 32px 0 24px;

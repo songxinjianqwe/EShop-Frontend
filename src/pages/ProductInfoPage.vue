@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import OrderPlaceForm from '@/components/OrderPlaceForm'
+import OrderPlaceForm from '@/components/order/OrderPlaceForm'
 
 export default {
     data() {
