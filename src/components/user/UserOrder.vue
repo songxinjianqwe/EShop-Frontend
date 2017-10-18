@@ -32,10 +32,15 @@
             </el-form>
         </div>
         <div class="order-table">
-            <el-table :data="orders.list" stripe style="width: 96%">
+            <el-table :data="orders.list" stripe style="width: 95%">
                 <el-table-column prop="id" label="订单号" width="100">
                 </el-table-column>
-                <el-table-column prop="product.name" label="产品" width="150">
+                <el-table-column prop="product.name" label="产品" width="180">
+                    <template scope="props">
+                        <router-link :to="'/products' + props.row.product.id">
+                        {{props.row.product.name}}
+                        </router-link>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="quantity" label="数量" width="100">
                 </el-table-column>
@@ -45,11 +50,11 @@
                 </el-table-column>
                 <el-table-column prop="orderStatus" label="订单状态" width="100">
                 </el-table-column>
-                <el-table-column label="操作" width="100" inline-template>
+                <el-table-column label="操作" width="80" inline-template>
                     <!-- 参数名必须为row -->
                     <el-button :disabled="row.orderStatus !== 'UNPAID'" @click="pay(row)">支付</el-button>
                 </el-table-column>
-                <el-table-column label="操作" width="100" inline-template>
+                <el-table-column label="操作" width="80" inline-template>
                     <el-button :disabled="row.orderStatus !== 'UNPAID'" @click="cancel(row)">取消</el-button>
                 </el-table-column>
             </el-table>

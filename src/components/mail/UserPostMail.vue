@@ -49,10 +49,6 @@ export default {
                 {
                     name: '群发',
                     value: 'BATCH'
-                },
-                {
-                    name: '广播',
-                    value: 'BROADCAST'
                 }
             ],
             errors: [],
@@ -64,21 +60,9 @@ export default {
         resetForm() {
             this.$refs['mailForm'].resetFields()
         },
-        isAdmin() {
-            this.user.roles.forEach(role => {
-                if (role.roleName === 'ROLE_ADMIN') {
-                    return true
-                }
-            })
-            return false
-        },
         submitForm() {
             let header = { Authentication: this.token }
             console.log('表单内容', this.mailForm)
-            if (!this.isAdmin() && this.mailForm.sendMode === 'BROADCAST') {
-                this.$message.error('用户不可广播站内信')
-                return
-            }
             this.axios.post('/mails', this.mailForm, { headers: header }).then(response => {
                 this.$message({
                     message: '发送成功',

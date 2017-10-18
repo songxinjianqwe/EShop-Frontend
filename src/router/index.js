@@ -22,6 +22,7 @@ import UserReceiveMail from '@/components/mail/UserReceiveMail'
 import UserPostMail from '@/components/mail/UserPostMail'
 import UserPayDeposit from '@/components/pay/UserPayDeposit'
 import UserPayPassword from '@/components/pay/UserPayPassword'
+import Error404Page from '@/pages/error-pages/404'
 
 Vue.use(Router)
 // main.js引入了VueRouter，所有的页面路由都写到router/index.js这个文件里
@@ -127,6 +128,10 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '*',
+      component: Error404Page
     }
   ]
 })

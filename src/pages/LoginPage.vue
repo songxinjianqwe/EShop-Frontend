@@ -71,6 +71,7 @@ export default {
                 window.location.reload()
             }).catch((error) => {
                 this.fetchCaptcha()
+                this.loginForm.captchaValue = ''
                 console.log(error)
                 if ("response" in error) {
                     this.errors = error.response.data.fieldErrors

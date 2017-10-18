@@ -45,5 +45,11 @@
 - 订单付款
 
 ## TODO
-- 集成腾讯云的云存储，实现图片上传云端
 - 集成markdown编辑器
+
+## 使用Cos云存储
+
+1. 准备：获取appId、secretId、secretKey以及在官网上设置CORS
+2. JS部分：进行文件上传/下载
+3. Java部分：搭建鉴权服务器，提供token
+只需要JS引入cos的包，Java不需要

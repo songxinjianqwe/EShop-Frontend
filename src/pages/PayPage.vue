@@ -15,8 +15,19 @@ export default {
     methods: {
         pay() {
             if (this.paymentPassword === '') {
-                this.$alert('请输入支付密码', '支付密码', {
-                    confirmButtonText: '确定'
+                this.$confirm('您未输入支付密码, 若未设置，是否立即设置?', '设置支付密码', {
+                    confirmButtonText: '去设置',
+                    cancelButtonText: '不去',
+                    type: 'warning'
+                }).then(() => {
+                    let userId  = JSON.parse(localStorage.getItem('loginResult')).id
+                    this.$router.push(`/users/${userId}/pay/password`)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '请先输入支付密码'
+                    });
+                    return 
                 });
                 return
             }
